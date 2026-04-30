@@ -1,5 +1,6 @@
 package api.tests.resources;
 
+import api.base.BaseTest;
 import api.constants.HttpStatus;
 import api.dto.resources.Resource;
 import api.specs.RequestSpec;
@@ -20,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Feature("Resources")
 @Story("PATCH /v1/disk/resources")
 @DisplayName("Обновление свойств")
-public class PatchResourcesTest {
+public class PatchResourcesTest extends BaseTest {
 
     private static final String TEST_FOLDER_PREFIX = "/test-folder-";
 
@@ -31,6 +32,8 @@ public class PatchResourcesTest {
     @Tag("positive")
     void testUpdateCustomProperties() {
         String folderPath = TEST_FOLDER_PREFIX + UUID.randomUUID();
+
+        trackForCleanup(folderPath);
 
         Allure.step("Создать тестовую папку");
         ResponseValidator.assertSuccess(ApiClient.putFolder(folderPath), HttpStatus.CREATED);
@@ -51,8 +54,6 @@ public class PatchResourcesTest {
             assertThat(resource.getCustomProperties()).isNotNull();
             assertThat(resource.getCustomProperties()).containsEntry("foo", "bar");
         });
-
-        ApiClient.deleteFolder(folderPath);
     }
 
     @Test

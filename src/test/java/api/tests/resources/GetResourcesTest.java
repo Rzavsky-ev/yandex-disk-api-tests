@@ -1,5 +1,6 @@
 package api.tests.resources;
 
+import api.base.BaseTest;
 import api.constants.HttpStatus;
 import api.dto.resources.Resource;
 import api.specs.RequestSpec;
@@ -19,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Feature("Resources")
 @Story("GET /v1/disk/resources")
 @DisplayName("Получение информации о папке")
-public class GetResourcesTest {
+public class GetResourcesTest extends BaseTest {
 
     private static final String TEST_FOLDER_PREFIX = "/test-folder-";
     private static final String PARENT_PREFIX = "/parent-";
@@ -36,6 +37,8 @@ public class GetResourcesTest {
     void testGetFolderInfo() {
         String folderPath = TEST_FOLDER_PREFIX + UUID.randomUUID();
 
+        trackForCleanup(folderPath);
+
         Allure.step("Создать тестовую папку");
         ResponseValidator.assertSuccess(ApiClient.putFolder(folderPath), HttpStatus.CREATED);
 
@@ -51,8 +54,6 @@ public class GetResourcesTest {
             assertThat(resource.getName()).isEqualTo(folderPath.substring(1));
             assertThat(resource.getPath()).contains(folderPath);
         });
-
-        ApiClient.deleteFolder(folderPath);
     }
 
     @Test
@@ -62,6 +63,8 @@ public class GetResourcesTest {
     @Tag("positive")
     void testGetFolderInfoWithFields() {
         String folderPath = TEST_FOLDER_PREFIX + UUID.randomUUID();
+
+        trackForCleanup(folderPath);
 
         Allure.step("Создать тестовую папку");
         ResponseValidator.assertSuccess(ApiClient.putFolder(folderPath), HttpStatus.CREATED);
@@ -83,8 +86,6 @@ public class GetResourcesTest {
             assertThat(resource.getModified()).isNull();
             assertThat(resource.getPath()).isNull();
         });
-
-        ApiClient.deleteFolder(folderPath);
     }
 
     @Test
@@ -95,6 +96,8 @@ public class GetResourcesTest {
     void testGetNonEmptyFolderInfo() {
         String parentPath = PARENT_PREFIX + UUID.randomUUID();
         String childPath = parentPath + CHILD_PREFIX + UUID.randomUUID();
+
+        trackForCleanup(parentPath);
 
         Allure.step("Создать родительскую папку");
         ResponseValidator.assertSuccess(ApiClient.putFolder(parentPath), HttpStatus.CREATED);
@@ -115,8 +118,6 @@ public class GetResourcesTest {
             assertThat(resource.getEmbedded().getItems().get(0).getName())
                     .isEqualTo(childPath.substring(parentPath.length() + 1));
         });
-
-        ApiClient.deleteFolder(parentPath);
     }
 
     @Test

@@ -1,5 +1,6 @@
 package api.tests.resources;
 
+import api.base.BaseTest;
 import api.constants.HttpStatus;
 import api.dto.resources.Link;
 import api.specs.RequestSpec;
@@ -19,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Feature("Resources")
 @Story("POST /v1/disk/resources/copy")
 @DisplayName("Копирование папки")
-public class CopyResourcesTest {
+public class CopyResourcesTest extends BaseTest {
 
     private static final String SOURCE_PREFIX = "/source-";
     private static final String TARGET_PREFIX = "/target-";
@@ -33,6 +34,9 @@ public class CopyResourcesTest {
     void testCopyFolder() {
         String sourcePath = SOURCE_PREFIX + UUID.randomUUID();
         String targetPath = TARGET_PREFIX + UUID.randomUUID();
+
+        trackForCleanup(sourcePath);
+        trackForCleanup(targetPath);
 
         Allure.step("Создать исходную папку");
         ResponseValidator.assertSuccess(ApiClient.putFolder(sourcePath), HttpStatus.CREATED);
@@ -52,9 +56,6 @@ public class CopyResourcesTest {
             assertThat(link.isTemplated()).isFalse();
 
         });
-
-        ApiClient.deleteFolder(sourcePath);
-        ApiClient.deleteFolder(targetPath);
     }
 
     @Test
@@ -79,6 +80,9 @@ public class CopyResourcesTest {
         String sourcePath = SOURCE_PREFIX + UUID.randomUUID();
         String targetPath = TARGET_PREFIX + UUID.randomUUID();
 
+        trackForCleanup(sourcePath);
+        trackForCleanup(targetPath);
+
         Allure.step("Создать исходную и целевую папки");
         ResponseValidator.assertSuccess(ApiClient.putFolder(sourcePath), HttpStatus.CREATED);
         ResponseValidator.assertSuccess(ApiClient.putFolder(targetPath), HttpStatus.CREATED);
@@ -87,9 +91,6 @@ public class CopyResourcesTest {
 
         ResponseValidator.assertError(ApiClient.copyFolderWithOverwrite(sourcePath, targetPath, false),
                 HttpStatus.CONFLICT);
-
-        ApiClient.deleteFolder(sourcePath);
-        ApiClient.deleteFolder(targetPath);
     }
 
     @Test

@@ -1,5 +1,6 @@
 package api.tests.resources;
 
+import api.base.BaseTest;
 import api.constants.HttpStatus;
 import api.dto.resources.Link;
 import api.specs.RequestSpec;
@@ -19,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Feature("Resources")
 @Story("PUT /v1/disk/resources")
 @DisplayName("Создание папки")
-public class PutResourcesTest {
+public class PutResourcesTest extends BaseTest {
 
     private static final String TEST_FOLDER_PREFIX = "/test-folder-";
 
@@ -30,6 +31,8 @@ public class PutResourcesTest {
     @Tag("positive")
     void testCreateFolder() {
         String folderPath = TEST_FOLDER_PREFIX + UUID.randomUUID();
+
+        trackForCleanup(folderPath);
 
         Allure.step("Создать папку");
         Response response = ApiClient.putFolder(folderPath);
@@ -43,8 +46,6 @@ public class PutResourcesTest {
             assertThat(link.isTemplated()).isFalse();
             assertThat(link.getHref()).isNotEmpty();
         });
-
-        ApiClient.deleteFolder(folderPath);
     }
 
     @Test
@@ -79,12 +80,12 @@ public class PutResourcesTest {
     void testCreateFolderConflict() {
         String folderPath = TEST_FOLDER_PREFIX + UUID.randomUUID();
 
+        trackForCleanup(folderPath);
+
         Allure.step("Создать папку первый раз");
         ResponseValidator.assertSuccess(ApiClient.putFolder(folderPath), HttpStatus.CREATED);
 
         Allure.step("Попытаться создать папку второй раз");
         ResponseValidator.assertError(ApiClient.putFolder(folderPath), HttpStatus.CONFLICT);
-
-        ApiClient.deleteFolder(folderPath);
     }
 }
