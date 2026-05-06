@@ -25,6 +25,17 @@ class DiskInfoTest {
     private static final String INVALID_FIELDS_SYNTAX = "total_space, , used_space";
 
     @Test
+    @DisplayName("Контракт: JSON Schema ответа GET /disk-info")
+    @Description("Проверка полной структуры ответа")
+    @Tag("contract")
+    void testDiskInfoContract() {
+        Response response = ApiClient.getDiskInfo();
+
+        ResponseValidator.assertSuccess(response, HttpStatus.OK);
+        ResponseValidator.assertJsonSchema(response, "schemas/disk-info.json");
+    }
+
+    @Test
     @DisplayName("GET /v1/disk - 200 OK: получение информации о Диске")
     @Description("Позитивный тест: проверка базовых полей ответа")
     @Tag("smoke")

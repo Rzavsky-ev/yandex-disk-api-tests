@@ -3,6 +3,7 @@ package api.utils;
 import api.dto.ErrorResponse;
 import api.exceptions.UtilityClassException;
 import io.qameta.allure.Allure;
+import io.restassured.module.jsv.JsonSchemaValidator;
 import io.restassured.response.Response;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -43,6 +44,20 @@ public class ResponseValidator {
             assertThat(error.getError()).isNotEmpty();
             assertThat(error.getMessage()).isNotEmpty();
             assertThat(error.getDescription()).isNotEmpty();
+        });
+    }
+
+    /**
+     * Проверяет, что тело ответа соответствует JSON Schema.
+     *
+     * @param response   ответ API
+     * @param schemaPath путь к схеме в classpath, например "schemas/link.json"
+     */
+    public static void assertJsonSchema(Response response, String schemaPath) {
+        Allure.step("Проверить JSON Schema: " + schemaPath, () -> {
+            response.then()
+                    .assertThat()
+                    .body(JsonSchemaValidator.matchesJsonSchemaInClasspath(schemaPath));
         });
     }
 }

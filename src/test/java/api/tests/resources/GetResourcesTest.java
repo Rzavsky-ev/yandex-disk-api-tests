@@ -30,6 +30,25 @@ public class GetResourcesTest extends BaseTest {
     private static final String FIELDS_NAME_TYPE_CREATED = "name,type,created";
 
     @Test
+    @DisplayName("Контракт: JSON Schema ответа GET /resources")
+    @Description("Проверка полной структуры ответа")
+    @Tag("contract")
+    void testGetResourceContract() {
+        String folderPath = "/contract-test-" + UUID.randomUUID();
+
+        trackForCleanup(folderPath);
+
+        Allure.step("Создать папку");
+        ApiClient.putFolder(folderPath);
+
+        Allure.step("Получить информацию и проверить схему");
+        Response response = ApiClient.getFolder(folderPath);
+
+        ResponseValidator.assertSuccess(response, HttpStatus.OK);
+        ResponseValidator.assertJsonSchema(response, "schemas/resource.json");
+    }
+
+    @Test
     @DisplayName("200 OK: получение информации о папке")
     @Description("Позитивный тест: получение метаинформации о существующей папке")
     @Tag("smoke")

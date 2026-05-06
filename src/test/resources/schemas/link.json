@@ -1,0 +1,23 @@
+{
+  "type": "object",
+  "required": [
+    "href",
+    "method",
+    "templated"
+  ],
+  "properties": {
+    "href": {
+      "type": "string"
+    },
+    "method": {
+      "type": "string",
+      "enum": [
+        "GET"
+      ]
+    },
+    "templated": {
+      "type": "boolean"
+    }
+  },
+  "additionalProperties": false
+}
