@@ -1,0 +1,153 @@
+{
+  "type": "object",
+  "required": [
+    "total_space",
+    "used_space",
+    "trash_size",
+    "system_folders",
+    "user"
+  ],
+  "properties": {
+    "total_space": {
+      "type": "integer"
+    },
+    "used_space": {
+      "type": "integer"
+    },
+    "trash_size": {
+      "type": "integer"
+    },
+    "max_file_size": {
+      "type": "integer"
+    },
+    "paid_max_file_size": {
+      "type": "integer"
+    },
+    "photounlim_size": {
+      "type": "integer"
+    },
+    "is_paid": {
+      "type": "boolean"
+    },
+    "revision": {
+      "type": "integer"
+    },
+    "reg_time": {
+      "type": "string"
+    },
+    "unlimited_autoupload_enabled": {
+      "type": "boolean"
+    },
+    "is_idm_managed_public_access": {
+      "type": "boolean"
+    },
+    "is_idm_managed_folder_address_access": {
+      "type": "boolean"
+    },
+    "is_sync_shared_folder_desktop": {
+      "type": "boolean"
+    },
+    "is_sync_vd_desktop": {
+      "type": "boolean"
+    },
+    "payment_flow": {
+      "type": "boolean"
+    },
+    "hide_screenshots_in_photoslice": {
+      "type": "boolean"
+    },
+    "is_legal_entity": {
+      "type": "boolean"
+    },
+    "monthly_traffic_limit": {
+      "type": "integer"
+    },
+    "monthly_traffic_limit_upgrades": {
+      "type": "object"
+    },
+    "file_size_limit_upgrades": {
+      "type": "object"
+    },
+    "system_folders": {
+      "type": "object",
+      "required": [
+        "downloads",
+        "applications"
+      ],
+      "properties": {
+        "applications": {
+          "type": "string"
+        },
+        "downloads": {
+          "type": "string"
+        },
+        "screenshots": {
+          "type": "string"
+        },
+        "photostream": {
+          "type": "string"
+        },
+        "social": {
+          "type": "string"
+        },
+        "facebook": {
+          "type": "string"
+        },
+        "google": {
+          "type": "string"
+        },
+        "instagram": {
+          "type": "string"
+        },
+        "vkontakte": {
+          "type": "string"
+        },
+        "mailru": {
+          "type": "string"
+        },
+        "odnoklassniki": {
+          "type": "string"
+        },
+        "scans": {
+          "type": "string"
+        },
+        "attach": {
+          "type": "string"
+        },
+        "messenger": {
+          "type": "string"
+        },
+        "calendar": {
+          "type": "string"
+        }
+      }
+    },
+    "user": {
+      "type": "object",
+      "required": [
+        "login"
+      ],
+      "properties": {
+        "login": {
+          "type": "string"
+        },
+        "uid": {
+          "type": "string"
+        },
+        "display_name": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "is_child": {
+          "type": "boolean"
+        },
+        "reg_time": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

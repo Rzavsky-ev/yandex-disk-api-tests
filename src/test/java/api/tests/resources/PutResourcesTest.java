@@ -25,6 +25,20 @@ public class PutResourcesTest extends BaseTest {
     private static final String TEST_FOLDER_PREFIX = "/test-folder-";
 
     @Test
+    @DisplayName("Контракт: JSON Schema ответа PUT /resources")
+    @Tag("contract")
+    void testCreateFolderContract() {
+        String folderPath = TEST_FOLDER_PREFIX + UUID.randomUUID();
+
+        trackForCleanup(folderPath);
+
+        Response response = ApiClient.putFolder(folderPath);
+
+        ResponseValidator.assertSuccess(response, HttpStatus.CREATED);
+        ResponseValidator.assertJsonSchema(response, "schemas/link.json");
+    }
+
+    @Test
     @DisplayName("PUT /v1/disk/resources - создание папки")
     @Description("Позитивный тест: создание новой папки в корне Диска")
     @Tag("smoke")

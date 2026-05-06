@@ -29,8 +29,8 @@ cd yandex-disk-api-tests
 
 ### 2. Получить OAuth-токен
 
-Перейти на [Полигон Яндекс.Диска](https://yandex.ru/dev/disk/poligon/), нажать «Получить OAuth-токен» и авторизоваться
-под своим Яндекс-аккаунтом. Скопировать полученный токен.
+Перейти на Полигон Яндекс.Диска, нажать «Получить OAuth-токен» и авторизоваться
+под тестовым пользователем Полигона (не личным аккаунтом). Скопировать полученный токен.
 
 ### 3. Установить переменную окружения
 
@@ -67,35 +67,46 @@ mvn allure:serve
 ## Структура проекта
 
 ```text
-src/test/java/api/
-├── constants/  # Константы
-│   └── HttpStatus.java
-├── dto/  # Модели ответов API
-│   ├── ErrorResponse.java
-│   ├── diskInfo/
-│   │   ├── Disk.java
-│   │   ├── SystemFolders.java
-│   │   └── User.java
+src/
+├── test/
+│   ├── java/api/
+│   │   ├── base/
+│   │   │   └── BaseTest.java
+│   │   ├── constants/
+│   │   │   └── HttpStatus.java
+│   │   ├── dto/
+│   │   │   ├── ErrorResponse.java
+│   │   │   ├── diskInfo/
+│   │   │   │   ├── Disk.java
+│   │   │   │   ├── SystemFolders.java
+│   │   │   │   └── User.java
+│   │   │   └── resources/
+│   │   │       ├── Embedded.java
+│   │   │       ├── Link.java
+│   │   │       └── Resource.java
+│   │   ├── exceptions/
+│   │   │   └── UtilityClassException.java
+│   │   ├── specs/
+│   │   │   └── RequestSpec.java
+│   │   ├── tests/
+│   │   │   ├── disk/
+│   │   │   │   └── DiskInfoTest.java
+│   │   │   └── resources/
+│   │   │       ├── CopyResourcesTest.java
+│   │   │       ├── DeleteResourcesTest.java
+│   │   │       ├── GetResourcesTest.java
+│   │   │       ├── PatchResourcesTest.java
+│   │   │       └── PutResourcesTest.java
+│   │   └── utils/
+│   │       ├── ApiClient.java
+│   │       └── ResponseValidator.java
 │   └── resources/
-│       ├── Embedded.java
-│       ├── Link.java
-│       └── Resource.java
-├── exceptions/  # Пользовательские исключения
-│   └── UtilityClassException.java
-├── specs/  # Спецификации RestAssured
-│   └── RequestSpec.java
-├── tests/  # Тесты
-│   ├── disk/
-│   │   └── DiskInfoTest.java
-│   └── resources/
-│       ├── CopyResourcesTest.java
-│       ├── DeleteResourcesTest.java
-│       ├── GetResourcesTest.java
-│       ├── PatchResourcesTest.java
-│       └── PutResourcesTest.java
-└── utils/  # Утилиты
-    ├── ApiClient.java
-    └── ResponseValidator.java
+│       ├── logback-test.xml
+│       └── schemas/
+│           ├── disk-info.json
+│           ├── error.json
+│           ├── link.json
+│           └── resource.json
 ```
 
 ## Тестовое покрытие
@@ -104,6 +115,7 @@ src/test/java/api/
 
 | Тест                                     | Статус | Описание                         |
 |------------------------------------------|--------|----------------------------------|
+| `testDiskInfoContract`                   | ✅ 200  | Контракт: JSON Schema            |
 | `testGetDiskInfo`                        | ✅ 200  | Получение базовой информации     |
 | `testGetDiskInfoWithFields`              | ✅ 200  | Работа параметра `fields`        |
 | `testGetDiskInfoIgnoresUnknownField`     | ✅ 200  | Игнор неизвестного поля          |
@@ -112,17 +124,19 @@ src/test/java/api/
 
 ### PUT /v1/disk/resources — Создание папки
 
-| Тест                           | Статус | Описание             |
-|--------------------------------|--------|----------------------|
-| `testCreateFolder`             | ✅ 201  | Создание папки       |
-| `testCreateFolderEmptyPath`    | ❌ 400  | Пустой путь          |
-| `testCreateFolderUnauthorized` | ❌ 401  | Невалидный токен     |
-| `testCreateFolderConflict`     | ❌ 409  | Папка уже существует |
+| Тест                           | Статус | Описание              |
+|--------------------------------|--------|-----------------------|
+| `testCreateFolderContract`     | ✅ 201  | Контракт: JSON Schema |
+| `testCreateFolder`             | ✅ 201  | Создание папки        |
+| `testCreateFolderEmptyPath`    | ❌ 400  | Пустой путь           |
+| `testCreateFolderUnauthorized` | ❌ 401  | Невалидный токен      |
+| `testCreateFolderConflict`     | ❌ 409  | Папка уже существует  |
 
 ### GET /v1/disk/resources — Получение метаинформации
 
 | Тест                          | Статус | Описание                     |
 |-------------------------------|--------|------------------------------|
+| `testGetResourceContract`     | ✅ 200  | Контракт: JSON Schema        |
 | `testGetFolderInfo`           | ✅ 200  | Информация о папке           |
 | `testGetFolderInfoWithFields` | ✅ 200  | С параметром `fields`        |
 | `testGetNonEmptyFolderInfo`   | ✅ 200  | Непустая папка с `_embedded` |
@@ -134,6 +148,7 @@ src/test/java/api/
 
 | Тест                         | Статус    | Описание                     |
 |------------------------------|-----------|------------------------------|
+| `testCopyContract`           | ✅ 201/202 | Контракт: JSON Schema        |
 | `testCopyFolder`             | ✅ 201/202 | Копирование папки            |
 | `testCopyNonExistentFolder`  | ❌ 404     | Исходная папка не существует |
 | `testCopyFolderConflict`     | ❌ 409     | Целевая папка существует     |
@@ -144,6 +159,7 @@ src/test/java/api/
 
 | Тест                         | Статус | Описание                     |
 |------------------------------|--------|------------------------------|
+| `testPatchContract`          | ✅ 200  | Контракт: JSON Schema        |
 | `testUpdateCustomProperties` | ✅ 200  | Добавление custom_properties |
 | `testPatchEmptyPath`         | ❌ 400  | Пустой путь                  |
 | `testPatchUnauthorized`      | ❌ 401  | Невалидный токен             |
@@ -173,12 +189,19 @@ mvn test -DincludeTags=positive
 # Негативные тесты
 mvn test -DincludeTags=negative
 
+# Контрактные тесты
+mvn test -DincludeTags=contract
+
 # Запуск с Allure-отчётом
 mvn clean test allure:serve
 
 # Только генерация отчёта (без запуска тестов)
 mvn allure:serve
 ```
+
+## CI/CD
+
+Проект поддерживает запуск в Jenkins (Pipeline). Токен хранится в Jenkins Credentials.
 
 ## Автор
 

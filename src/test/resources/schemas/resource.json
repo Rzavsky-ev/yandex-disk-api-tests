@@ -1,0 +1,139 @@
+{
+  "type": "object",
+  "required": [
+    "name",
+    "type",
+    "path",
+    "created",
+    "modified"
+  ],
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "dir",
+        "file"
+      ]
+    },
+    "path": {
+      "type": "string"
+    },
+    "created": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "modified": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "public_key": {
+      "type": "string"
+    },
+    "public_url": {
+      "type": "string"
+    },
+    "resource_id": {
+      "type": "string"
+    },
+    "revision": {
+      "type": "integer"
+    },
+    "comment_ids": {
+      "type": "object",
+      "properties": {
+        "public_resource": {
+          "type": "string"
+        },
+        "private_resource": {
+          "type": "string"
+        }
+      }
+    },
+    "exif": {
+      "type": "object"
+    },
+    "custom_properties": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "_embedded": {
+      "type": "object",
+      "required": [
+        "items",
+        "limit",
+        "offset"
+      ],
+      "properties": {
+        "sort": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "limit": {
+          "type": "integer"
+        },
+        "offset": {
+          "type": "integer"
+        },
+        "total": {
+          "type": "integer"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "type",
+              "path",
+              "created",
+              "modified"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "dir",
+                  "file"
+                ]
+              },
+              "path": {
+                "type": "string"
+              },
+              "created": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "modified": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "preview": {
+                "type": "string"
+              },
+              "md5": {
+                "type": "string"
+              },
+              "mime_type": {
+                "type": "string"
+              },
+              "size": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

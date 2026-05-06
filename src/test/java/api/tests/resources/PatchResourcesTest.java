@@ -26,6 +26,24 @@ public class PatchResourcesTest extends BaseTest {
     private static final String TEST_FOLDER_PREFIX = "/test-folder-";
 
     @Test
+    @DisplayName("Контракт: JSON Schema ответа PATCH /resources")
+    @Description("Проверка полной структуры ответа")
+    @Tag("contract")
+    void testPatchContract() {
+        String folderPath = "/contract-test-" + UUID.randomUUID();
+
+        trackForCleanup(folderPath);
+
+        ApiClient.putFolder(folderPath);
+
+        Map<String, Object> body = Map.of("custom_properties", Map.of("foo", "bar"));
+        Response response = ApiClient.patchFolder(folderPath, body);
+
+        ResponseValidator.assertSuccess(response, HttpStatus.OK);
+        ResponseValidator.assertJsonSchema(response, "schemas/resource.json");
+    }
+
+    @Test
     @DisplayName("200 OK: обновление custom_properties")
     @Description("Позитивный тест: добавление пользовательских свойств к папке")
     @Tag("regression")

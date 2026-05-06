@@ -27,6 +27,28 @@ public class CopyResourcesTest extends BaseTest {
     private static final String NON_EXISTENT_PREFIX = "/non-existent-";
 
     @Test
+    @DisplayName("Контракт: JSON Schema ответа POST /resources/copy")
+    @Description("Проверка полной структуры ответа")
+    @Tag("contract")
+    void testCopyContract() {
+        String sourcePath = SOURCE_PREFIX + UUID.randomUUID();
+        String targetPath = TARGET_PREFIX + UUID.randomUUID();
+
+        trackForCleanup(sourcePath);
+        trackForCleanup(targetPath);
+
+        ApiClient.putFolder(sourcePath);
+
+        Response response = ApiClient.copyFolder(sourcePath, targetPath);
+
+        ResponseValidator.assertSuccess(response, HttpStatus.CREATED);
+        Allure.step("Проверить статус 201 Created или 202 Accepted", () -> {
+            assertThat(response.statusCode()).isIn(HttpStatus.CREATED, HttpStatus.ACCEPTED);
+        });
+        ResponseValidator.assertJsonSchema(response, "schemas/link.json");
+    }
+
+    @Test
     @DisplayName("201 Created: копирование папки")
     @Description("Позитивный тест: копирование существующей папки")
     @Tag("smoke")
