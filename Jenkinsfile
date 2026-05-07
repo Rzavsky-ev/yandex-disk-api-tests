@@ -11,12 +11,13 @@ pipeline {
                 checkout scm
                 sh './mvnw clean test'
             }
-            post {
-                always {
-                    allure includeProperties: false,
-                           results: [[path: 'target/allure-results']]
-                }
-            }
+              post {
+                           always {
+                               allure includeProperties: false,
+                                      commandline: 'allure',
+                                      results: [[path: 'target/allure-results']]
+                           }
+                       }
         }
     }
 }
