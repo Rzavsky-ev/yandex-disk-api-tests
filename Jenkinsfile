@@ -6,15 +6,10 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-
         stage('Test') {
             steps {
-                sh 'mvn clean test'
+                checkout scm
+                sh './mvnw clean test'
             }
             post {
                 always {
