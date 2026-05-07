@@ -1,11 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        maven 'maven-3.8+'
-        jdk 'jdk17'
-    }
-
     environment {
         YANDEX_DISK_TOKEN = credentials('yandex-disk-token')
     }
