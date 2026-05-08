@@ -21,14 +21,14 @@ pipeline {
                     emailext (
                         subject: "[Jenkins] yandex-disk-tests: ✅ SUCCESS",
                         body: "Все тесты прошли! Сборка: ${BUILD_URL}",
-                        to: 'rzavsky.ev@gmail.com'
+                        to: 'EduardRzhavsky@yandex.ru'
                     )
                 }
                 failure {
                     emailext (
                         subject: "[Jenkins] yandex-disk-tests: ❌ FAILURE",
                         body: "Тесты упали. Сборка: ${BUILD_URL}",
-                        to: 'rzavsky.ev@gmail.com'
+                        to: 'EduardRzhavsky@yandex.ru'
                     )
                 }
             }
